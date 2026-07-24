@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Fawry_Assessment")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b9af522249bd283f21445c6b83f015f47b2b1712")]
 [assembly: System.Reflection.AssemblyProductAttribute("Fawry_Assessment")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Fawry_Assessment")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
