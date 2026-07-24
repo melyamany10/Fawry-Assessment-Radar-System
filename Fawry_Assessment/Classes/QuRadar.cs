@@ -1,55 +1,74 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Fawry_Assessment.Classes;
 
-namespace Fawry_Assessment.Classes
+public class QuRadar
 {
-    public class QuRadar
+    public List<TrafficRules> TrafficRules;
+
+    public Dictionary<string, List<Violations>> Vehicle_History; //must save the details of each car violations for reporting
+
+    public Dictionary<string, int> Violations_Count;
+
+    public QuRadar(List<TrafficRules> trafficRules)
     {
-        public List<TrafficRules> TrafficRules;
-        public Dictionary<string, int> Fines;
-        public Dictionary<string, int> Violations_Count;
-        public QuRadar(List<TrafficRules> trafficRules)
+        TrafficRules = trafficRules;
+        Vehicle_History = new Dictionary<string, List<Violations>>();
+        Violations_Count = new Dictionary<string, int>();
+    }
+
+    public void ProcessObservation(Physical_Radar_Info radarInfo)
+    {
+        List<Violations> currentViolations = new List<Violations>();
+        int currentTotalFine = 0;
+
+        foreach (var rule in TrafficRules)
         {
-            TrafficRules = trafficRules;
-            Fines = new Dictionary<string, int>();
-            Violations_Count = new Dictionary<string, int>();
+            Violations v = rule.Evaluate(radarInfo);
+            if (v != null)
+            {
+                currentViolations.Add(v);
+                currentTotalFine += v.Fine_Value;
+
+                if (Violations_Count.ContainsKey(v.Violations_Description))
+                    Violations_Count[v.Violations_Description]++;
+                else
+                    Violations_Count[v.Violations_Description] = 1;
+            }
         }
 
-        public void reportAllViolationCount()
+        if (currentViolations.Count > 0)
         {
-            foreach (var violation_count in Violations_Count)
+            if (!Vehicle_History.ContainsKey(radarInfo.Plate_Number))
             {
-                Console.WriteLine($"Viechle {violation_count.Key}: {violation_count.Value}");
+                Vehicle_History[radarInfo.Plate_Number] = new List<Violations>();
             }
-        }
+            Vehicle_History[radarInfo.Plate_Number].AddRange(currentViolations);
 
-        public void getAllTrafficRules()
-        {
-            foreach (var fine_count in Fines)
+            Console.WriteLine($"Traffic for car {radarInfo.Plate_Number}");
+            Console.WriteLine($"Total amount: {currentTotalFine} EGP");
+            Console.WriteLine("Violations:");
+            foreach (var v in currentViolations)
             {
-                Console.WriteLine($"Viechle {fine_count.Key}: {fine_count.Value}");
-                reportAllViolationCount();
+                Console.WriteLine($"- {v.Violations_Description} : {v.Fine_Value} EGP");
             }
+            Console.WriteLine();
         }
+    }
 
-        public void getSpecificViechleViolations(string viechleNumber)
+    public void getAllPossibleFines() 
+    {
+        Console.WriteLine("--- every singe associated fine for specific viechle ---");
+        foreach (var record in Vehicle_History)
         {
-            if (Violations_Count.ContainsKey(viechleNumber))
+            string plate = record.Key;
+            List<Violations> history = record.Value;
+
+            int totalFineForCar = 0;
+            foreach (var v in history)
             {
-                Console.WriteLine($"Viechle {viechleNumber}: {Violations_Count[viechleNumber]}");
-                foreach(var fine_count in Fines)
-                {
-                    if (fine_count.Key == viechleNumber)
-                    {
-                        Console.WriteLine($"Viechle {fine_count.Key}: {fine_count.Value}");
-                    }
-                }
+                totalFineForCar += v.Fine_Value;
             }
-            else
-            {
-                Console.WriteLine($"No violations found for viechle {viechleNumber}");
-            }
+
+            Console.WriteLine($"Plate: {plate} | Total Fines: {totalFineForCar} EGP");
         }
     }
 }

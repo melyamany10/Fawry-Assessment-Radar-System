@@ -24,7 +24,7 @@ namespace Fawry_Assessment.Classes
         public Violations Evaluate(Physical_Radar_Info radarInfo)
         {
             string viechle_type = radarInfo.Viechle_Type;
-            bool result;
+            bool result = false;
             switch(viechle_type)
             {
                 case "Private_Car":
