@@ -1,5 +1,3 @@
-content = """# QuRadar Project
-
 This project is buit for Fawry internship challange. It is a OOP system for a traffic radar. The system do many things to catch cars that break the law and make tickets for them.
 
 ## Main Classes and functions
@@ -17,9 +15,3 @@ This project is buit for Fawry internship challange. It is a OOP system for a tr
 
 ## Handwritten Notes
 (https://drive.google.com/drive/folders/1R5roXn5rKXNSXfpM-F-dOy3nAKfNex4w?usp=sharing)
-
-"""
-
-with open('README.md', 'w') as f:
-    f.write(content)
-print("File created: [file-tag: README.md]")
